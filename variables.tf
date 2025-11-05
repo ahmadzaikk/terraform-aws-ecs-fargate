@@ -10,7 +10,7 @@ variable "readonlyRootFilesystem" {
 variable "enable_blue_green" {
   description = "Enable Blue/Green deployment (CodeDeploy). If false, ECS rolling update is used."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "containerInsights" {

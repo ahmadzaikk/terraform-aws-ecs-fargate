@@ -6,6 +6,13 @@ variable "readonlyRootFilesystem" {
   default     = false
   description = "When this parameter is true, the container is given read-only access to its root file system"
 }
+
+variable "enable_blue_green" {
+  description = "Enable Blue/Green deployment (CodeDeploy). If false, ECS rolling update is used."
+  type        = bool
+  default     = false
+}
+
 variable "containerInsights" {
   description = "Enables container insights if true"
   type        = bool

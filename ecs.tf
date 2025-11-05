@@ -260,11 +260,15 @@ resource "aws_ecs_service" "this" {
   enable_execute_command = var.enable_execute_command
   tags                   = var.tags
   propagate_tags         = "TASK_DEFINITION"
-  load_balancer {
+  dynamic "load_balancer" {
+  for_each = var.enable_blue_green ? [1] : []
+  content {
     target_group_arn = var.target_group_arn
     container_name   = var.container_name != "" ? var.container_name : var.name
     container_port   = var.container_port
   }
+}
+
 
   launch_type                        = "FARGATE"
   desired_count                      = var.desired_count
@@ -273,8 +277,9 @@ resource "aws_ecs_service" "this" {
   health_check_grace_period_seconds  = var.health_check_grace_period_seconds
 
   deployment_controller {
-    type = "CODE_DEPLOY"
-  }
+  type = var.enable_blue_green ? "CODE_DEPLOY" : "ECS"
+ }
+
   ### Deployment circuit breaker is not support with code_deploy controller
 
   #deployment_circuit_breaker{
